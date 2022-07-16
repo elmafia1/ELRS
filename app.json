@@ -1,6 +1,6 @@
 {
-    "الاسم" : "ميوزك ألـرًسًــــــــآمِ"  ،
-    "الشعار" : "https://telegra.ph/file/cc9d3ab087176593ec101.jpg"  ،
+    "name": "ميوزك   ألـرًسًــــــــآمِ🇪🇬",
+    "logo": "https://telegra.ph/file/cc9d3ab087176593ec101.jpg",
     "description": "افضل سورسات التليكرام",
     "keywords": ["tgmusicbot", "voice chat", "telegram"],
     "repository": "https://github.com/ERTWF/ASD",
@@ -17,12 +17,12 @@
         "ASSISTANT_USERNAME": {
             "description": "معرف حساب المساعد بدون '@')",
             "required": true,
-            "value": "E_R_S_A_M1"
+            "value": "ABNADLlB"
         },
         "START_PIC": {
             "description": "صورة البوت مطلوبة",
             "required": true,
-            "value": "https://telegra.ph/file/cc9d3ab087176593ec101.jpg"
+            "value": "https://telegra.ph/file/254c862a85ccf3b86ee09.mp4"
         },
         "BOT_TOKEN": {
             "description": "توكن بوتك حط",
@@ -31,17 +31,17 @@
         "BOT_USERNAME": {
             "description": "معرف بوتك بدون '@')",
             "required": true,
-            "value": "Elrasam11111bot"
+            "value": "RREWQYUBOT"
         },
         "PROFILE_CHANNEL": {
             "description": "رابط قناتك خلي .",
             "required": true,
-            "value": "E_L_R_A_S_A_M"
+            "value": "https://t.me/VFF35"
         },
         "OWNER_USERNAME": {
             "description": "معرفك بدون@ كمطور",
             "required": true,
-            "value": "Mahmod777777"
+            "value": "QABNADLIB"
         },
         "STRING_SESSION": {
             "description": "كود بايروجرام",
@@ -50,18 +50,18 @@
         "SUDO_USERS": {
             "description": "ايدي المطورين حط ايديك كمطور",
             "required": true,
-            "value": "2125600195"
+            "value": "1939538780"
             
         },
         "SUPPORT_GROUP": {
             "description": "رابط كروب الدعم حطه",
             "required": true,
-            "value": "ELRASRM"
+            "value": "https://t.me/faqek"
         },
         "UPDATES_CHANNEL": {
             "description": "رابط قناتك الثانيه ازا ماعندك غير وحده حطو نفس يلي فوك",
             "required": true,
-            "value": "https://t.me/ELRASRM"
+            "value": "https://t.me/VFF34"
         }
     },
     "buildpacks": [
