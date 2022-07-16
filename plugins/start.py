@@ -34,10 +34,10 @@ async def start_private(client: Client, message: Message):
                 ],
                 [
                     InlineKeyboardButton(
-                        "🥇 ¦ الــكروب", url=f"{SUPPORT_GROUP}"
+                        "🥇 ¦ الــكروب", url=f"https://t.me/ELRASRM"
                     ),
                     InlineKeyboardButton(
-                        "⚙️ ¦ الـسـورس", url=f"{UPDATES_CHANNEL}"
+                        "⚙️ ¦ الـسـورس", url=f"https://t.me/E_L_R_A_S_A_M"
                     ),
                 ],
             ]

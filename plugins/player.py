@@ -177,7 +177,7 @@ async def play(_, message: Message):
 
         file_name = get_file_name(audio)
         title = file_name
-        thumb_name = "https://telegra.ph/file/8d18e1e24e7b66b822144.png"
+        thumb_name = "https://telegra.ph/file/cc9d3ab087176593ec101.jpg"
         thumbnail = thumb_name
         duration = round(audio.duration / 60)
         views = "Locally added"
@@ -196,12 +196,12 @@ async def play(_, message: Message):
                             
                     InlineKeyboardButton(
                             text="🥇 ¦ الــكروب",
-                            url=f"{SUPPORT_GROUP}")
+                            url=f"https://t.me/ELRASRM")
                ],
                [
                         InlineKeyboardButton(
                             text="⚙️ ¦ الـسـورس",
-                            url=f"{PROFILE_CHANNEL}")
+                            url=f"https://t.me/E_L_R_A_S_A_M")
                    
                 ]
             ]
@@ -245,16 +245,16 @@ async def play(_, message: Message):
                [
                     InlineKeyboardButton(
                             text="⚙️ ¦ قـناة الــبوت",
-                            url=f"{UPDATES_CHANNEL}"),
+                            url=f"{SUPPORT_GROUP}"),
                             
                     InlineKeyboardButton(
                             text="🥇 ¦ الــكروب",
-                            url=f"{SUPPORT_GROUP}")
+                            url=f"https://t.me/ELRASRM")
                ],
                [
                         InlineKeyboardButton(
                             text="⚙️ ¦ الـسـورس",
-                            url=f"{PROFILE_CHANNEL}")
+                            url=f"https://t.me/E_L_R_A_S_A_M")
                    
                 ]
             ]
@@ -262,7 +262,7 @@ async def play(_, message: Message):
 
         except Exception as e:
             title = "NaN"
-            thumb_name = "https://telegra.ph/file/8d18e1e24e7b66b822144.png"
+            thumb_name = "https://telegra.ph/file/cc9d3ab087176593ec101.jpg"
             duration = "NaN"
             views = "NaN"
             keyboard = InlineKeyboardMarkup(
@@ -279,12 +279,12 @@ async def play(_, message: Message):
                             
                     InlineKeyboardButton(
                             text="🥇 ¦ الــكروب",
-                            url=f"{SUPPORT_GROUP}")
+                            url=f"https://t.me/ELRASRM")
                ],
                [
                         InlineKeyboardButton(
                             text="⚙️ ¦ الـسـورس",
-                            url=f"{PROFILE_CHANNEL}")
+                            url=f"https://t.me/E_L_R_A_S_A_M")
                    
                 ]
             ]
@@ -347,12 +347,12 @@ async def play(_, message: Message):
                             
                     InlineKeyboardButton(
                             text="🥇 ¦ الــكروب",
-                            url=f"{SUPPORT_GROUP}")
+                            url=f"https://t.me/ELRASRM")
                ],
                [
                         InlineKeyboardButton(
                             text="⚙️ ¦ الـسـورس",
-                            url=f"{PROFILE_CHANNEL}")
+                            url=f"https://t.me/E_L_R_A_S_A_M")
                    
                 ]
             ]
