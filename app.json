@@ -36,7 +36,7 @@
         "PROFILE_CHANNEL": {
             "description": "رابط قناتك خلي .",
             "required": true,
-            "value": "E_L_R_A_S_A_M
+            "value": "E_L_R_A_S_A_M"
         },
         "OWNER_USERNAME": {
             "description": "معرفك بدون@ كمطور",
