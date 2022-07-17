@@ -1,479 +1,538 @@
-import os
-import aiofiles
-import aiohttp
-import ffmpeg
-import random
-import requests
-from os import path
-from asyncio.queues import QueueEmpty
-from typing import Callable
-from pyrogram import Client, filters
-from pyrogram.types import Message, Voice, InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.errors import UserAlreadyParticipant
-from modules.cache.admins import set
-from modules.clientbot import clientbot, queues
-from modules.clientbot.clientbot import client as USER
-from modules.helpers.admins import get_administrators
-from youtube_search import YoutubeSearch
-from modules import converter
-from modules.downloaders import youtube
-from modules.config import ASSISTANT_USERNAME, DURATION_LIMIT, que, OWNER_USERNAME, SUDO_USERS, SUPPORT_GROUP, UPDATES_CHANNEL, PROFILE_CHANNEL
-from modules.cache.admins import admins as a
-from modules.helpers.filters import command, other_filters
-from modules.helpers.command import commandpro
-from modules.helpers.decorators import errors, authorized_users_only
-from modules.helpers.errors import DurationLimitError
-from modules.helpers.gets import get_url, get_file_name
-from PIL import Image, ImageFont, ImageDraw
 from pytgcalls import StreamType
-from pytgcalls.types.input_stream import InputStream
-from pytgcalls.types.input_stream import InputAudioStream
-
-# 𝑰𝒏𝒕𝒆𝒓𝒏𝒂𝒍 𝑴𝒐𝒅𝒖𝒍𝒆𝒔
-chat_id = None
-useer = "NaN"
-
-themes = [
-    "blue",
-    "dgreen",
-    "hgreen",
-    "lgreen",
-    "orange",
-    "pink",
-    "purple",
-    "red",
-    "sky",
-    "thumbnail",
-    "yellow",
-]
-
-def transcode(filename):
-    ffmpeg.input(filename).output(
-        "input.raw", format="s16le", acodec="pcm_s16le", ac=2, ar="48k"
-    ).overwrite_output().run()
-    os.remove(filename)
-
-
-# 𝑪𝒐𝒏𝒗𝒆𝒓𝒕 𝑺𝒆𝒄𝒐𝒏𝒅𝒔 𝑻𝒐 𝒎𝒎:𝒔𝒔
-def convert_seconds(seconds):
-    seconds = seconds % (24 * 3600)
-    seconds %= 3600
-    minutes = seconds // 60
-    seconds %= 60
-    return "%02d:%02d" % (minutes, seconds)
-
-
-# 𝑪𝒐𝒏𝒗𝒆𝒓𝒕 𝒉𝒉:𝒎𝒎:𝒔𝒔 𝑻𝒐 𝑺𝒆𝒄𝒐𝒏𝒅𝒔
-def time_to_seconds(time):
-    stringt = str(time)
-    return sum(int(x) * 60 ** i for i, x in enumerate(reversed(stringt.split(":"))))
-
-
-# 𝑪𝒉𝒂𝒏𝒈𝒆 𝑻𝒉𝒖𝒎𝒃𝒏𝒂𝒊𝒍 𝑺𝒊𝒛𝒆
-def changeImageSize(maxWidth, maxHeight, image):
-    widthRatio = maxWidth / image.size[0]
-    heightRatio = maxHeight / image.size[1]
-    newWidth = int(widthRatio * image.size[0])
-    newHeight = int(heightRatio * image.size[1])
-    return image.resize((newWidth, newHeight))
-
-# 𝑮𝒆𝒏𝒆𝒓𝒂𝒕𝒆 𝑻𝒉𝒖𝒎𝒃𝒏𝒂𝒊𝒍
-async def generate_cover(requested_by, title, views, duration, thumbnail):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(thumbnail) as resp:
-            if resp.status == 200:
-                f = await aiofiles.open("background.png", mode="wb")
-                await f.write(await resp.read())
-                await f.close()
-
-    theme = random.choice(themes)
-    image1 = Image.open("./background.png")
-    image2 = Image.open(f"resource/{theme}.png")
-    image3 = changeImageSize(1280, 720, image1)
-    image4 = changeImageSize(1280, 720, image2)
-    image5 = image3.convert("RGBA")
-    image6 = image4.convert("RGBA")
-    Image.alpha_composite(image5, image6).save("temp.png")
-    img = Image.open("temp.png")
-    draw = ImageDraw.Draw(img)
-    font = ImageFont.truetype("resource/font.otf", 32)
-    draw.text((190, 550), f"Title: {title[:50]} ...", (255, 255, 255), font=font)
-    draw.text((190, 590), f"Duration: {duration}", (255, 255, 255), font=font)
-    draw.text((190, 630), f"Views: {views}", (255, 255, 255), font=font)
-    draw.text(
-        (190, 670),
-        f"Powered By: ZEUS",
-        (255, 255, 255),
-        font=font,
-    )
-    img.save("final.png")
-    os.remove("temp.png")
-    os.remove("background.png")
-
-
-@Client.on_message(
-    commandpro(["/play", ".play", "شغل", "تشغيل", "@"])
-    & filters.group
-    & ~filters.edited
-    & ~filters.forwarded
-    & ~filters.via_bot
+from pytgcalls.types import Update
+from pytgcalls.types.input_stream import AudioPiped, AudioVideoPiped
+from pytgcalls.types.input_stream.quality import (
+    HighQualityAudio,
+    HighQualityVideo,
+    LowQualityVideo,
+    MediumQualityVideo,
 )
-async def play(_, message: Message):
-    global que
-    global useer
-    await message.delete()
-    lel = await message.reply("**🔎 جــاري البـــحث ...**")
+from telethon.tl.functions.channels import LeaveChannelRequest
+from telethon.tl.functions.messages import ImportChatInviteRequest
+from telethon.tl.functions.messages import ImportChatInviteRequest
+from pytgcalls.exceptions import (
+    NoActiveGroupCall,
+    NotInGroupCallError
+)
+from Mahmod777777.status import *
+from telethon.tl.functions.users import GetFullUserRequest
+from telethon.tl.functions.messages import ExportChatInviteRequest
+import telethon.utils
+from telethon.tl import functions
+from telethon.tl import types
+from telethon.utils import get_display_name
+from telethon.tl.functions.users import GetFullUserRequest
+from youtubesearchpython import VideosSearch
 
-    administrators = await get_administrators(message.chat)
-    chid = message.chat.id
+ 
+fotoplay = "https://telegra.ph/file/37338e26a9c4d611c7770.jpg"
+ngantri = "https://telegra.ph/file/37338e26a9c4d611c7770.jpg"
+from Mahmod777777 import E_L_R_A_S, Mahmod777777, client as Client
+owner = "2125600195"
+from Mahmod777777.helpers.yt_dlp import bash
+from Mahmod777777.helpers.chattitle import CHAT_TITLE
+from Mahmod777777.helpers.queues import (
+    QUEUE,
+    add_to_queue,
+    clear_queue,
+    get_queue,
+    pop_an_item,
+)
+from telethon import Button, events
+from Config import Config
 
+from Mahmod777777.helpers.thumbnail import gen_thumb
+
+
+def vcmention(user):
+    full_name = get_display_name(user)
+    if not isinstance(user, types.User):
+        return full_name
+    return f"[{full_name}](tg://user?id={user.id})"
+
+
+def ytsearch(query: str):
     try:
-        user = await USER.get_me()
-    except:
-        user.first_name = "Ayano_Player"
-    usar = user
-    wew = usar.id
+        search = VideosSearch(query, limit=1).result()
+        data = search["result"][0]
+        songname = data["title"]
+        url = data["link"]
+        duration = data["duration"]
+        thumbnail = f"https://i.ytimg.com/vi/{data['id']}/hqdefault.jpg"
+        return [songname, url, duration, thumbnail]
+    except Exception as e:
+        print(e)
+        return 0
+
+
+async def ytdl(format: str, link: str):
+    stdout, stderr = await bash(f'yt-dlp -g -f "{format}" {link}')
+    if stdout:
+        return 1, stdout.split("\n")[0]
+    return 0, stderr
+
+
+async def skip_item(chat_id: int, x: int):
+    if chat_id not in QUEUE:
+        return 0
+    chat_queue = get_queue(chat_id)
     try:
-        await _.get_chat_member(chid, wew)
-    except:
-        for administrator in administrators:
-            if administrator == message.from_user.id:
-                try:
-                    invitelink = await _.export_chat_invite_link(chid)
-                except:
-                    await lel.edit(
-                        "**💥 A༙T༙ F༙I༙R༙S༙T༙ 🥀 M༙a༙k༙e༙ M༙E༙ A༙d༙m༙i༙n༙ 😗 ...**")
-                    return
+        songname = chat_queue[x][0]
+        chat_queue.pop(x)
+        return songname
+    except Exception as e:
+        print(e)
+        return 0
 
-                try:
-                    await USER.join_chat(invitelink)
-                    await USER.send_message(
-                        message.chat.id, "** تم دخولي هههه  ...**")
 
-                except UserAlreadyParticipant:
-                    pass
-                except Exception:
-                    await lel.edit(
-                        f"**نعتذر ياطيب الحساب المساعد محظور او مقيد من القروب  @{ASSISTANT_USERNAME} بتقدر تحكي مع مطوري لتحل المشكلة@{OWNER_USERNAME} ✨ **")
-    try:
-        await USER.get_chat(chid)
-    except:
-        await lel.edit(
-            f"**نعتذر ياطيب الحساب المساعد محظور او مقيد من القروب  @{ASSISTANT_USERNAME} بتقدر تحكي مع مطوري لتحل المشكلة @{OWNER_USERNAME}) ✨ **")
-        return
-    
-    audio = (
-        (message.reply_to_message.audio or message.reply_to_message.voice)
-        if message.reply_to_message
-        else None
-    )
-    url = get_url(message)
-
-    if audio:
-        if round(audio.duration / 60) > DURATION_LIMIT:
-            raise DurationLimitError(
-                f"**💥 𝐏𝐥𝐚𝐲 🎧 𝐌𝐮𝐬𝐢𝐜 ✖️ 𝐋𝐞𝐬𝐬 ⚡️\n🤟 𝐓𝐡𝐚𝐧⚡️ {DURATION_LIMIT} 💞 𝐌𝐢𝐧𝐮𝐭𝐞 ...**"
-            )
-
-        file_name = get_file_name(audio)
-        title = file_name
-        thumb_name = "https://telegra.ph/file/cc9d3ab087176593ec101.jpg"
-        thumbnail = thumb_name
-        duration = round(audio.duration / 60)
-        views = "Locally added"
-
-        keyboard = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                            text="🥇 ¦ المـــطور",
-                            url=f"https://t.me/{OWNER_USERNAME}")
-               ],
-               [
-                    InlineKeyboardButton(
-                            text="⚙️ ¦ قـناة الــبوت",
-                            url=f"{UPDATES_CHANNEL}"),
-                            
-                    InlineKeyboardButton(
-                            text="🥇 ¦ الــكروب",
-                            url=f"https://t.me/ELRASRM")
-               ],
-               [
-                        InlineKeyboardButton(
-                            text="⚙️ ¦ الـسـورس",
-                            url=f"https://t.me/E_L_R_A_S_A_M")
-                   
-                ]
-            ]
+async def skip_current_song(chat_id: int):
+    if chat_id not in QUEUE:
+        return 0
+    chat_queue = get_queue(chat_id)
+    if len(chat_queue) == 1:
+        await E_L_R_A_S.leave_group_call(chat_id)
+        clear_queue(chat_id)
+        return 1
+    songname = chat_queue[1][0]
+    url = chat_queue[1][1]
+    link = chat_queue[1][2]
+    type = chat_queue[1][3]
+    RESOLUSI = chat_queue[1][4]
+    if type == "Audio":
+        await E_L_R_A_S.change_stream(
+            chat_id,
+            AudioPiped(
+                url,
+            ),
         )
-
-        requested_by = message.from_user.first_name
-        await generate_cover(requested_by, title, views, duration, thumbnail)
-        file_path = await converter.convert(
-            (await message.reply_to_message.download(file_name))
-            if not path.isfile(path.join("downloads", file_name))
-            else file_name
+    elif type == "Video":
+        if RESOLUSI == 720:
+            hm = HighQualityVideo()
+        elif RESOLUSI == 480:
+            hm = MediumQualityVideo()
+        elif RESOLUSI == 360:
+            hm = LowQualityVideo()
+        await E_L_R_A_S.change_stream(
+            chat_id, AudioVideoPiped(url, HighQualityAudio(), hm)
         )
-
-    elif url:
-        try:
-            results = YoutubeSearch(url, max_results=1).to_dict()
-            # print results
-            title = results[0]["title"]
-            thumbnail = results[0]["thumbnails"][0]
-            thumb_name = f"thumb{title}.jpg"
-            thumb = requests.get(thumbnail, allow_redirects=True)
-            open(thumb_name, "wb").write(thumb.content)
-            duration = results[0]["duration"]
-            url_suffix = results[0]["url_suffix"]
-            views = results[0]["views"]
-            durl = url
-            durl = durl.replace("youtube", "youtubepp")
-
-            secmul, dur, dur_arr = 1, 0, duration.split(":")
-            for i in range(len(dur_arr) - 1, -1, -1):
-                dur += int(dur_arr[i]) * secmul
-                secmul *= 60
-
-            keyboard = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                            text="🥇 ¦ المـــطور",
-                            url=f"https://t.me/{OWNER_USERNAME}")
-               ],
-               [
-                    InlineKeyboardButton(
-                            text="⚙️ ¦ قـناة الــبوت",
-                            url=f"{SUPPORT_GROUP}"),
-                            
-                    InlineKeyboardButton(
-                            text="🥇 ¦ الــكروب",
-                            url=f"https://t.me/ELRASRM")
-               ],
-               [
-                        InlineKeyboardButton(
-                            text="⚙️ ¦ الـسـورس",
-                            url=f"https://t.me/E_L_R_A_S_A_M")
-                   
-                ]
-            ]
-        )
-
-        except Exception as e:
-            title = "NaN"
-            thumb_name = "https://telegra.ph/file/cc9d3ab087176593ec101.jpg"
-            duration = "NaN"
-            views = "NaN"
-            keyboard = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                            text="🥇 ¦ المـــطور",
-                            url=f"https://t.me/{OWNER_USERNAME}")
-               ],
-               [
-                    InlineKeyboardButton(
-                            text="⚙️ ¦ قـناة الــبوت",
-                            url=f"{UPDATES_CHANNEL}"),
-                            
-                    InlineKeyboardButton(
-                            text="🥇 ¦ الــكروب",
-                            url=f"https://t.me/ELRASRM")
-               ],
-               [
-                        InlineKeyboardButton(
-                            text="⚙️ ¦ الـسـورس",
-                            url=f"https://t.me/E_L_R_A_S_A_M")
-                   
-                ]
-            ]
-        )
-
-        if (dur / 60) > DURATION_LIMIT:
-            await lel.edit(
-                f"**💥 𝐏𝐥𝐚𝐲 🔊 𝐌𝐮𝐬𝐢𝐜 ✖️ 𝐋𝐞𝐬𝐬 ⚡️\n🤟 𝐓𝐡𝐚𝐧⚡️ {DURATION_LIMIT} 💞 𝐌𝐢𝐧𝐮𝐭𝐞 ...**"
-            )
-            return
-        requested_by = message.from_user.first_name
-        await generate_cover(requested_by, title, views, duration, thumbnail)
-        file_path = await converter.convert(youtube.download(url))
-    else:
-        if len(message.command) < 2:
-            return await lel.edit(
-                "**🤖 عــــليك الــــرد ع مــلف صـوتي او كـــتابة اســم الاغــنيه ياطــيب...**"
-            )
-        await lel.edit("**🔄 يـــتم التــشغيل ...**")
-        query = message.text.split(None, 1)[1]
-        # print(query)
-        try:
-            results = YoutubeSearch(query, max_results=1).to_dict()
-            url = f"https://youtube.com{results[0]['url_suffix']}"
-            # print results
-            title = results[0]["title"]
-            thumbnail = results[0]["thumbnails"][0]
-            thumb_name = f"thumb{title}.jpg"
-            thumb = requests.get(thumbnail, allow_redirects=True)
-            open(thumb_name, "wb").write(thumb.content)
-            duration = results[0]["duration"]
-            url_suffix = results[0]["url_suffix"]
-            views = results[0]["views"]
-            durl = url
-            durl = durl.replace("youtube", "youtubepp")
-
-            secmul, dur, dur_arr = 1, 0, duration.split(":")
-            for i in range(len(dur_arr) - 1, -1, -1):
-                dur += int(dur_arr[i]) * secmul
-                secmul *= 60
-
-        except Exception as e:
-            await lel.edit(
-                "** اكتب الاسم صح ياورع...**"
-            )
-            print(str(e))
-            return
-
-        keyboard = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                            text="🥇 ¦ المـــطور",
-                            url=f"https://t.me/{OWNER_USERNAME}")
-               ],
-               [
-                    InlineKeyboardButton(
-                            text="⚙️ ¦ قـناة الــبوت",
-                            url=f"{UPDATES_CHANNEL}"),
-                            
-                    InlineKeyboardButton(
-                            text="🥇 ¦ الــكروب",
-                            url=f"https://t.me/ELRASRM")
-               ],
-               [
-                        InlineKeyboardButton(
-                            text="⚙️ ¦ الـسـورس",
-                            url=f"https://t.me/E_L_R_A_S_A_M")
-                   
-                ]
-            ]
-        )
-
-        if (dur / 900) > DURATION_LIMIT:
-            await lel.edit(
-                f"**💥 𝐏𝐥𝐚𝐲 🔊 𝐌𝐮𝐬𝐢𝐜 ✖️ 𝐋𝐞𝐬𝐬 ⚡️\n🤟 𝐓𝐡𝐚𝐧⚡️ {DURATION_LIMIT} 💞 𝐌𝐢𝐧𝐮𝐭𝐞 ...**"
-            )
-            return
-        requested_by = message.from_user.first_name
-        await generate_cover(requested_by, title, views, duration, thumbnail)
-        file_path = await converter.convert(youtube.download(url))
-    ACTV_CALLS = []
-    chat_id = message.chat.id
-    for x in clientbot.pytgcalls.active_calls:
-        ACTV_CALLS.append(int(x.chat_id))
-    if int(chat_id) in ACTV_CALLS:
-        position = await queues.put(chat_id, file=file_path)
-        await message.reply_photo(
-            photo="final.png",
-            caption="** ابشر يا طيب راح اشغلها لك بعد الاغنيه الشغاله ...**".format(position),
-            reply_markup=keyboard,
-        )
-    else:
-        await clientbot.pytgcalls.join_group_call(
-                chat_id, 
-                InputStream(
-                    InputAudioStream(
-                        file_path,
-                    ),
-                ),
-                stream_type=StreamType().local_stream,
-            )
-
-        await message.reply_photo(
-            photo="final.png",
-            reply_markup=keyboard,
-            caption="**💥 ابشر بعزك تم التشغيل ياغالي تدلل ...**".format(),
-           )
-
-    os.remove("final.png")
-    return await lel.delete()
-    
-    
-@Client.on_message(commandpro(["استئناف", ".pause", "/pause", "!pause"]) & other_filters)
-@errors
-@authorized_users_only
-async def pause(_, message: Message):
-    await message.delete()
-    await clientbot.pytgcalls.pause_stream(message.chat.id)
-    await message.reply_text("**▶️ تم ياطيب استئناف الغنيه ...**"
-    )
+    pop_an_item(chat_id)
+    return [songname, link, type]
 
 
-@Client.on_message(commandpro(["استمرار", ".resume", "/resume", "!resume"]) & other_filters)
-@errors
-@authorized_users_only
-async def resume(_, message: Message):
-    await message.delete()
-    await clientbot.pytgcalls.resume_stream(message.chat.id)
-    await message.reply_text("**⏸ ابشر تم استمرار الغنيه ...**"
-    )
+@Mahmod777777.on(events.callbackquery.CallbackQuery(data="cls"))
+async def _(event):
+
+     await event.delete()
+
+btnn =[
+    [Button.url("الدعم", url=f"t.me/ELRASRM"), Button.url("القناة", url=f"t.me/E_L_R_A_S_A_M")],
+    [Button.inline("اغلاق", data="cls")]]
 
 
-
-@Client.on_message(commandpro(["تخطي", ".skip", "/skip", "عدي"]) & other_filters)
-@errors
-@authorized_users_only
-async def skip(_, message: Message):
-    global que
-    await message.delete()
-    ACTV_CALLS = []
-    chat_id = message.chat.id
-    for x in clientbot.pytgcalls.active_calls:
-        ACTV_CALLS.append(int(x.chat_id))
-    if int(chat_id) not in ACTV_CALLS:
-        await message.reply_text("**💥 لايوجد شيئ شغال ياطيب...**")
-    else:
-        queues.task_done(chat_id)
-        
-        if queues.is_empty(chat_id):
-            await message.reply_text("**🙄 ياغالي مافي شي شغال  ...**") 
-            await clientbot.pytgcalls.leave_group_call(chat_id)
+#play
+@Mahmod777777.on(events.NewMessage(pattern="^[?!/]تشغيل"))
+async def play(event):
+    title = ' '.join(event.text[5:])
+    replied = await event.get_reply_message()
+    sender = await event.get_sender()
+    chat = await event.get_chat()
+    chat_id = event.chat_id
+    from_user = vcmention(event.sender) 
+    public = event.chat_id
+    if (
+        replied
+        and not replied.audio
+        and not replied.voice
+        and not title
+        or not replied
+        and not title
+    ):
+        return await event.client.send_file(chat_id, Config.CMD_IMG, caption="**يجب عليك كتابة عنوان الشيء الذي تريد تشغيله**\n\n **مثال**: `!تشغيل سورة الكهف`", buttons=btnn)
+    elif replied and not replied.audio and not replied.voice or not replied:
+        botman = await event.reply("يتم التعرف على البيانات انتظر . . .")
+        query = event.text.split(maxsplit=1)[1]
+        search = ytsearch(query)
+        if search == 0:
+            await botman.edit(
+                "**- لم يتم العثور على المطلوب اكتب عنوان اخر بشكل اصح**"
+            )     
         else:
-            await message.reply_text("**⏩ جاري التخطي ...**") 
-            await clientbot.pytgcalls.change_stream(
-                chat_id, 
-                InputStream(
-                    InputAudioStream(
-                        clientbot.queues.get(chat_id)["file"],
+            songname = search[0]
+            title = search[0]
+            url = search[1]
+            duration = search[2]
+            thumbnail = search[3]
+            userid = sender.id
+            titlegc = chat.title
+            ctitle = await CHAT_TITLE(titlegc)
+            thumb = await gen_thumb(thumbnail, title, userid, ctitle)
+            format = "best[height<=?720][width<=?1280]"
+            hm, ytlink = await ytdl(format, url)
+            if hm == 0:
+                await botman.edit(f"`{ytlink}`")
+            elif chat_id in QUEUE:
+                pos = add_to_queue(chat_id, songname, ytlink, url, "Audio", 0)
+                caption = f"- **ت مالاضافة الى قائمة التشغيل»** `#{pos}`\n\n**🏷 العنوان:** [{songname}]({url})\n**⏱ المدة:** `{duration}`\n🎧 **الطب الى:** {from_user}"
+                await botman.delete()
+                await event.client.send_file(chat_id, thumb, caption=caption, buttons=btnn)
+            else:
+                try:
+                    await E_L_R_A_S.join_group_call(
+                        chat_id,
+                        AudioPiped(
+                            ytlink,
+                        ),
+                        stream_type=StreamType().pulse_stream,
+                    )
+                    add_to_queue(chat_id, songname, ytlink, url, "Audio", 0)
+                    caption = f"🏷 **العنوان:** [{songname}]({url})\n**⏱ المدة:** `{duration}`\n💡 **الحالة:** شغالة الان\n🎧 **الطب الى:** {from_user}"
+                    await botman.delete()
+                    await event.client.send_file(chat_id, thumb, caption=caption, buttons=btnn)
+                except Exception as ep:
+                    clear_queue(chat_id)
+                    await botman.edit(f"`{ep}`")
+
+    else:
+        botman = await event.edit("📥 **جار التحميل**")
+        dl = await replied.download_media()
+        link = f"https://t.me/c/{chat.id}/{event.reply_to_msg_id}"
+        if replied.audio:
+            songname = "Telegram Music Player"
+        elif replied.voice:
+            songname = "Voice Note"
+        if chat_id in QUEUE:
+            pos = add_to_queue(chat_id, songname, dl, link, "Audio", 0)
+            caption = f"💡 ** تم الاضافة الى قائمة التشغيل**`#{pos}`\n\n**🏷 العنوان:** [{songname}]({link})\n**ايدي الدردشة**: `{chat_id}`\n🎧 **الطلب الى**: {from_user}"
+            await event.client.send_file(chat_id, ngantri, caption=caption, buttons=btnn)
+            await botman.delete()
+        else:
+            try:
+                await E_L_R_A_S.join_group_call(
+                    chat_id,
+                    AudioPiped(
+                        dl,
                     ),
-                ),
+                    stream_type=StreamType().pulse_stream,
+                )
+                add_to_queue(chat_id, songname, dl, link, "Audio", 0)
+                caption = f"🏷 ** العنوان** [{songname}]({link})\n**ايدي الدردشة**: `{chat_id}`\n💡 **الحالة:** شغالة الان\n🎧 **الطلب الى**: {from_user}"
+                await event.client.send_file(chat_id, fotoplay, caption=caption, buttons=btnn)
+                await botman.delete()
+            except Exception as ep:
+                clear_queue(chat_id)
+                await botman.edit(f"`{ep}`")
+
+
+
+
+
+#end
+@Mahmod777777.on(events.NewMessage(pattern="^[/?!]انهاء"))
+@E_R_S_A_M1
+async def vc_end(event, perm):
+    chat_id = event.chat_id
+    if chat_id in QUEUE:
+        try:
+            await E_L_R_A_S.leave_group_call(chat_id)
+            clear_queue(chat_id)
+            await event.reply("**تم الغاء التشغيل بنجاح**")
+        except Exception as e:
+            await event.reply(f"**خطأ:** `{e}`")
+    else:
+        await event.reply("**تم الغاء التشغيل بنجاح**")
+
+
+
+
+
+@Mahmod777777.on(events.NewMessage(pattern="^[?!/]فيديو"))
+async def vplay(event):
+    if Config.HEROKU_MODE == "ENABLE":
+        await event.reply("- لا يمكنك استخدام هذا الامر لانك تستخدم هيروكو في التنصيب")
+        return
+    title = ' '.join(event.text[6:])
+    replied = await event.get_reply_message()
+    sender = await event.get_sender()
+    userid = sender.id
+    chat = await event.get_chat()
+    titlegc = chat.title
+    chat_id = event.chat_id
+    public = event.chat_id
+    from_user = vcmention(event.sender)
+    if (
+        replied
+        and not replied.video
+        and not replied.document
+        and not title
+        or not replied
+        and not title
+    ):
+        return await event.client.send_file(chat_id, Config.CMD_IMG, caption="**يجب عليك كتابة عنوان لتشغيله**\n\n **مثال**: `!فيديو قران`", buttons=btnn)
+    if replied and not replied.video and not replied.document:
+        razan = await event.reply("انتظر قليلا يتم التعرف")
+        query = event.text.split(maxsplit=1)[1]
+        search = ytsearch(query)
+        RESOLUSI = 720
+        hmmm = HighQualityVideo()
+        if search == 0:
+            await razan.edit(
+                "**يجب عليك كتابة عنوان صحيح**"
             )
+        else:
+            query = event.text.split(maxsplit=1)[1]
+            search = ytsearch(query)
+            songname = search[0]
+            title = search[0]
+            url = search[1]
+            duration = search[2]
+            thumbnail = search[3]
+            ctitle = await CHAT_TITLE(titlegc)
+            thumb = await gen_thumb(thumbnail, title, userid, ctitle)
+            format = "best[height<=?720][width<=?1280]"
+            hm, ytlink = await ytdl(format, url)
+            if hm == 0:
+                await razan.edit(f"`{ytlink}`")
+            elif chat_id in QUEUE:
+                pos = add_to_queue(
+                    chat_id, songname, ytlink, url, "Video", RESOLUSI)
+                caption = f"💡 **تم الاضافة الى قائمة التشغيل** `#{pos}`\n\n**🏷 العنوان:** [{songname}]({url})\n**⏱ المدة** `{duration}`\n🎧 **بطلب من ** {from_user}"
+                await razan.delete()
+                await event.client.send_file(chat_id, thumb, caption=caption, buttons=btnn)
+            else:
+                try:
+                    await E_L_R_A_S.join_group_call(
+                        chat_id,
+                        AudioVideoPiped(ytlink, HighQualityAudio(), hmmm),
+                        stream_type=StreamType().pulse_stream,
+                    )
+                    add_to_queue(
+                        chat_id,
+                        songname,
+                        ytlink,
+                        url,
+                        "Video",
+                        RESOLUSI)
+                    await razan.delete()
+                    await event.client.send_file(event.chat_id,
+                        f"**🏷 **تم بدأ تشغيل**:** [{songname}]({url})\n**⏱ المدة** `{duration}`\n💡 **الحالة:** شغالة الان\n🎧 **بطلب من ** {from_user}, buttons=btnn",
+                        link_preview=False,
+                    )
+                except Exception as ep:
+                    clear_queue(chat_id)
+                    await razan.edit(f"`{ep}`")
+
+    elif replied:
+        razan = await event.reply("📥 **يتم تحميل الفيديو انتظر قليلا**")
+        dl = await replied.download_media()
+        link = f"https://t.me/c/{chat.id}/{event.reply_to_msg_id}"
+        if len(event.text.split()) < 2:
+            RESOLUSI = 720
+        else:
+            pq = event.text.split(maxsplit=1)[1]
+            RESOLUSI = int(pq)
+        if replied.video or replied.document:
+            songname = "Telegram Video Player"
+        if chat_id in QUEUE:
+            pos = add_to_queue(chat_id, songname, dl, link, "Video", RESOLUSI)
+            caption = f"💡 **تم تشغيل الفيديو في الدردشة** `#{pos}`\n\n**🏷 العنوان:** [{songname}]({link})\n**ايدي الدردشة**: `{chat_id}`\n🎧 **بطلب من ** {from_user}"
+            await event.client.send_file(chat_id, ngantri, caption=caption, buttons=btnn)
+            await razan.delete()
+        else:
+            if RESOLUSI == 360:
+                hmmm = LowQualityVideo()
+            elif RESOLUSI == 480:
+                hmmm = MediumQualityVideo()
+            elif RESOLUSI == 720:
+                hmmm = HighQualityVideo()
+            try:
+                await E_L_R_A_S.join_group_call(
+                    chat_id,
+                    AudioVideoPiped(dl, HighQualityAudio(), hmmm),
+                    stream_type=StreamType().pulse_stream,
+                )
+                add_to_queue(chat_id, songname, dl, link, "Video", RESOLUSI)
+                caption = f"🏷 ** العنوان** [{songname}]({link})\n**ايدي الدردشة**: `{chat_id}`\n💡 **الحالة:** شغالة الان\n🎧 **بطلب من ** {from_user}"
+                await razan.delete()
+                await event.client.send_file(chat_id, fotoplay, caption=caption, buttons=btnn)
+            except Exception as ep:
+                clear_queue(chat_id)
+                await razan.edit(f"`{ep}`")
+    else:
+        razan = await event.reply("- جار البحث انتظر قليلا ")
+        query = event.text.split(maxsplit=1)[1]
+        search = ytsearch(query)
+        RESOLUSI = 720
+        hmmm = HighQualityVideo()
+        if search == 0:
+            await razan.edit("**لم يتم التعرف على العنوان**")
+        else:
+            songname = search[0]
+            title = search[0]
+            url = search[1]
+            duration = search[2]
+            thumbnail = search[3]
+            ctitle = await CHAT_TITLE(titlegc)
+            thumb = await gen_thumb(thumbnail, title, userid, ctitle)
+            format = "best[height<=?720][width<=?1280]"
+            hm, ytlink = await ytdl(format, url)
+            if hm == 0:
+                await razan.edit(f"`{ytlink}`")
+            elif chat_id in QUEUE:
+                pos = add_to_queue(
+                    chat_id, songname, ytlink, url, "Video", RESOLUSI)
+                caption = f"💡 **تمت الاضافة ال قائمة التشغيل** `#{pos}`\n\n🏷 ** العنوان** [{songname}]({url})\n**⏱ المدة** `{duration}`\n🎧 **بطلب من ** {from_user}"
+                await razan.delete()
+                await event.client.send_file(chat_id, thumb, caption=caption, buttons=btnn)
+            else:
+                try:
+                    await E_L_R_A_S.join_group_call(
+                        chat_id,
+                        AudioVideoPiped(ytlink, HighQualityAudio(), hmmm),
+                        stream_type=StreamType().pulse_stream,
+                    )
+                    add_to_queue(
+                        chat_id,
+                        songname,
+                        ytlink,
+                        url,
+                        "Video",
+                        RESOLUSI)
+                    caption = f"🏷 ** العنوان** [{songname}]({url})\n**⏱ المدة** `{duration}`\n💡 **الحالة:** شغالة الان\n🎧 **بطلب من ** {from_user}"
+                    await razan.delete()
+                    await event.client.send_file(chat_id, thumb, caption=caption, buttons=btnn)
+                except Exception as ep:
+                    clear_queue(chat_id)
+                    await razan.edit(f"`{ep}`")
 
 
 
-@Client.on_message(commandpro(["end", "/end", "!end", ".end", "ايقاف", "/stop", ".stop", "وقف", "x"]) & other_filters)
-@errors
-@authorized_users_only
-async def stop(_, message: Message):
-    await message.delete()
-    try:
-        clientbot.queues.clear(message.chat.id)
-    except QueueEmpty:
-        pass
 
-    await clientbot.pytgcalls.leave_group_call(message.chat.id)
-    await message.reply_text("**مافي شي مشتغل ️...**"
-    )
+#playlist
+@Mahmod777777.on(events.NewMessage(pattern="^[?!/]التشغيل"))
+@E_R_S_A_M1
+async def vc_playlist(event, perm):
+    chat_id = event.chat_id
+    if chat_id in QUEUE:
+        chat_queue = get_queue(chat_id)
+        if len(chat_queue) == 1:
+            await event.reply(
+                f"**قائمة التشغيل :**\n• [{chat_queue[0][0]}]({chat_queue[0][2]}) | `{chat_queue[0][3]}`",
+                link_preview=False,
+            )
+        else:
+            PLAYLIST = f"**🎧 قائمة التشغيل:**\n**• [{chat_queue[0][0]}]({chat_queue[0][2]})** | `{chat_queue[0][3]}` \n\n**• المقاطع المنتظرة:**"
+            l = len(chat_queue)
+            for x in range(1, l):
+                hmm = chat_queue[x][0]
+                hmmm = chat_queue[x][2]
+                hmmmm = chat_queue[x][3]
+                PLAYLIST = PLAYLIST + "\n" + \
+                    f"**#{x}** - [{hmm}]({hmmm}) | `{hmmmm}`"
+            await event.reply(PLAYLIST, link_preview=False)
+    else:
+        await event.reply("**لم يتم تشغيل شيء اصلا**")
 
 
-@Client.on_message(commandpro(["تحديث", ".reload", "/reload", "!reload", "/admincache"]))
-@errors
-@authorized_users_only
-async def update_admin(client, message):
-    global a
-    await message.delete()
-    new_admins = []
-    new_ads = await client.get_chat_members(message.chat.id, filter="administrators")
-    for u in new_ads:
-        new_admins.append(u.user.id)
-    a[message.chat.id] = new_admins
-    await message.reply_text("**♻ ️قيد التحديث ♻️...**")
+
+
+
+
+#كود المغادرة
+@Mahmod777777.on(events.NewMessage(pattern="^[?!/]مغادرة"))
+@E_R_S_A_M1
+async def leavevc(event, perm):
+    razan = await event.reply("- يرجى الانتظار قليلا")
+    chat_id = event.chat_id
+    from_user = vcmention(event.sender)
+    if from_user:
+        try:
+            await E_L_R_A_S.leave_group_call(chat_id)
+        except (NotInGroupCallError, NoActiveGroupCall):
+            pass
+        await razan.edit("**- تم مغادرة المكالمة بنجاح للدردشة** `{}`".format(str(event.chat_id)))
+    else:
+        await razan.edit(f"**عذرا {owner} يستخدم الامر في الدردشات الصوتية فقط**")
+
+
+
+@Mahmod777777.on(events.NewMessage(pattern="^[?!/]تخطي"))
+@E_R_S_A_M1
+async def vc_skip(event, perm):
+    chat_id = event.chat_id
+    if len(event.text.split()) < 2:
+        op = await skip_current_song(chat_id)
+        if op == 0:
+            await event.reply("- لم يتم تشغيل شيء اصلا")
+        elif op == 1:
+            await event.reply("القائمة انتهت لذلك غادرت المكالمة, 10")
+        else:
+            await event.reply(
+                f"**⏭ تم التخطي**\n**🎧 يتم تشغيل الان** - [{op[0]}]({op[1]})",
+                link_preview=False,
+            )
+    else:
+        skip = event.text.split(maxsplit=1)[1]
+        DELQUE = "**يتم حذف الباقي من قائمة التشغيل:**"
+        if chat_id in QUEUE:
+            items = [int(x) for x in skip.split(" ") if x.isdigit()]
+            items.sort(reverse=True)
+            for x in items:
+                if x != 0:
+                    hm = await skip_item(chat_id, x)
+                    if hm != 0:
+                        DELQUE = DELQUE + "\n" + f"**#{x}** - {hm}"
+            await event.reply(DELQUE)
+
+
+@Mahmod777777.on(events.NewMessage(pattern="^[?!/]ايقاف"))
+@E_R_S_A_M1
+async def vc_pause(event, perm):
+    chat_id = event.chat_id
+    if chat_id in QUEUE:
+        try:
+            await E_L_R_A_S.pause_stream(chat_id)
+            await event.reply("**تم أيقاف التشغيل مؤقتا**")
+        except Exception as e:
+            await event.reply(f"**خطأ** `{e}`")
+    else:
+        await event.reply("**لم يتم تشغيل شيء اصلا**")
+
+
+
+@Mahmod777777.on(events.NewMessage(pattern="^[?!/]استئناف"))
+@E_R_S_A_M1
+async def vc_resume(event, perm):
+    chat_id = event.chat_id
+    if chat_id in QUEUE:
+        try:
+            await E_L_R_A_S.resume_stream(chat_id)
+            await event.reply(event, "**- تم استئناف التشغيل**")
+        except Exception as e:
+            await event.reply(event, f"**خطأ** `{e}`")
+    else:
+        await event.reply(event, "**لم يتم تشغيل شيء اصلا**")
+
+
+@E_L_R_A_S.on_stream_end()
+async def stream_end_handler(_, u: Update):
+    chat_id = u.chat_id
+    print(chat_id)
+    await skip_current_song(chat_id)
+
+
+@E_L_R_A_S .on_closed_voice_chat()
+async def closedvc(_, chat_id: int):
+    if chat_id in QUEUE:
+        clear_queue(chat_id)
+
+
+@E_L_R_A_S.on_left()
+async def leftvc(_, chat_id: int):
+    if chat_id in QUEUE:
+        clear_queue(chat_id)
+
+
+@E_L_R_A_S.on_kicked()
+async def kickedvc(_, chat_id: int):
+    if chat_id in QUEUE:
+        clear_queue(chat_id)
