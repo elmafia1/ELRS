@@ -17,13 +17,9 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 async def start_private(client: Client, message: Message):
  await message.reply_photo(
         photo=f"{START_PIC}",
-        caption=f"""**━━━━━━━━━━━━━━━━━━
-💥 اهلا بك اختصاص هذا البوت 
+        caption=f"""**💥 اهلا بك اختصاص هذا البوت 
 تشغيل الاغاني في المكالمات الصوتية » 
-لمعرفة الاوامر عليك النقر على زر الاوامر
-قناة ســـورس ألـرًسًــــــــآمِ [قناة السورس](t.me/E_L_R_A_S_A_M)... 
-مطور السورس [ELRASAM](https://t.me/Mahmod777777)
-━━━━━━━━━━━━━━━━━━**""",
+لمعرفة الاوامر عليك النقر على زر الاوامر.**""",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
@@ -41,9 +37,11 @@ async def start_private(client: Client, message: Message):
                         "🥇 ¦ الــكروب", url=f"{SUPPORT_GROUP}"
                     ),
                     InlineKeyboardButton(
- " ⚙️ ¦ السورس ", url=f"https://t.me/E_L_R_A_S_A_M"}"
+                        "⚙️ ¦ الـسـورس", url=f"{UPDATES_CHANNEL}"
                     ),
                 ],
             ]
         ),
     )
+
+
