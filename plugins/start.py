@@ -1,47 +1,53 @@
-import asyncio
-
-from helpers.filters import command
-from config import BOT_NAME as bn, BOT_USERNAME as bu, SUPPORT_GROUP, OWNER_USERNAME as me, START_IMG
+from modules.config import (
+    START_PIC, 
+    BOT_USERNAME,
+    SUPPORT_GROUP,
+    OWNER_USERNAME,
+    UPDATES_CHANNEL,
+)
+from modules.helpers.filters import command
 from pyrogram import Client, filters
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 
-@Client.on_message(command("/start") & filters.private & ~filters.group & ~filters.edited)
-async def start_(client: Client, message: Message):
-    await message.delete()
-    await message.reply_photo(
-        photo=f"{START_IMG}",
+
+@Client.on_message(
+    command(["start", f"start@{BOT_USERNAME}"]) & filters.private & ~filters.edited
+)
+async def start_private(client: Client, message: Message):
+ await message.reply_photo(
+        photo=f"{START_PIC}",
         caption=f"""**━━━━━━━━━━━━━━━━━━
 💥 اهلا بك اختصاص هذا البوت 
 تشغيل الاغاني في المكالمات الصوتية » 
 لمعرفة الاوامر عليك النقر على زر الاوامر
-قناة ســـورس ألـرًسًــــــــآمِ [قناة السورس](t.me/E_L_R_A_S_A_M)...
+قناة ســـورس ألـرًسًــــــــآمِ [قناة السورس](t.me/E_L_R_A_S_A_M)... 
+مطور السورس [ELRASAM](https://t.me/Mahmod777777)
 ━━━━━━━━━━━━━━━━━━**""",
-    reply_markup=InlineKeyboardMarkup(
+        reply_markup=InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton(
-                        " اضفني لي مجموعتك ", url=f"https://t.me/{bu}?startgroup=true"
-                       ),
-                  ],[
-                    InlineKeyboardButton(
-                        " ⚙️ ¦ السورس ", url=f"https://t.me/E_L_R_A_S_A_M"
-                    ),
-                    InlineKeyboardButton(
-                        " ☣️ ¦ جـروب الدعم ", url=f"https://t.me/{SUPPORT_GROUP}"
+                        "🎯 ¦ اضـفـني الى مـجمـوعـتك ¦ 🎯",
+                        url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
                     )
-                ],[
+                ],
+                [
+                    InlineKeyboardButton("🥇 ¦ المـــطور", url=f"https://t.me/{OWNER_USERNAME}"),
+                    InlineKeyboardButton("🖥 ¦ الأوامــر", url=f"https://telegra.ph/%D8%A7%D9%87%D9%84%D8%A7-%D8%A8%D9%83-%D8%AC%D9%85%D9%8A%D8%B9-%D8%A7%D9%84%D8%A7%D9%88%D8%A7%D9%85%D8%B1-%D8%B9%D8%B1%D8%A8%D9%8A%D9%87-%D9%8A%D9%85%D9%83%D9%86%D9%83-%D8%AA%D8%B4%D8%BA%D9%8A%D9%84-%D9%81%D9%8A-%D8%A7%D9%84%D8%A7%D9%88%D8%A7%D9%85%D8%B1-%D8%A7%D9%84%D8%A7%D8%AC%D9%86%D8%A8%D9%8A%D9%87-%D8%A7%D9%8A%D8%B6%D8%A2-%D9%88%D8%B4%D9%83%D8%B1%D8%A7-%D9%84%D9%83%D9%85-07-01"),
+                ],
+                [
                     InlineKeyboardButton(
-                        " 🖥 ¦ الأوامــر ", url=f"https://telegra.ph/%F0%9D%91%BA%F0%9D%91%BC%F0%9D%91%B6%F0%9D%91%B9%F0%9D%91%AA%F0%9D%91%AC-%F0%9D%91%A9%F0%9D%91%AC%F0%9D%91%B4%F0%9D%91%A9%F0%9D%91%B6-06-19"
+                        "🥇 ¦ الــكروب", url=f"{SUPPORT_GROUP}"
                     ),
                     InlineKeyboardButton(
-                        " 🧨 ¦ مطور السورس ", url="https://t.me/Mahmod777777"
-                    )]
+ " ⚙️ ¦ السورس ", url=f"https://t.me/E_L_R_A_S_A_M"}"
+                    ),
+                ],
             ]
-       ),
+        ),
     )
-
-@Client.on_message(command(["مبرمج السورس" ,"ألـرًسًــــــــآمِ" ,"سورس" ,"السورس" ,"الرسام" ,"جودزيلا" ,"الرسام"]) & filters.group & ~filters.edited)
+    @Client.on_message(command(["مبرمج السورس" ,"ألـرًسًــــــــآمِ" ,"سورس" ,"السورس" ,"الرسام" ,"ELRASAM" ,"الرسام"]) & filters.group & ~filters.edited)
 async def start(client: Client, message: Message):
     await message.reply_photo(
         photo=f"https://telegra.ph/file/37338e26a9c4d611c7770.jpg",
@@ -56,7 +62,7 @@ async def start(client: Client, message: Message):
             ],
             [
                 InlineKeyboardButton(
-                    "𝗦𝗨𝗢𝗥𝗖𝗘 ELRASAM🦖", url=f"https://t.me/E_L_R_A_S_A_M"
+                    "𝗦𝗨𝗢𝗥𝗖𝗘 ELRASAM🦍", url=f"https://t.me/E_L_R_A_S_A_M"
                 ),
             ],
             [
@@ -123,3 +129,6 @@ async def new_chat(c: Client, m: Message):
 
 
 chat_watcher_group = 5
+
+
+
