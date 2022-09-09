@@ -374,15 +374,11 @@ async def play(_, message: Message):
         position = await queues.put(chat_id, file=file_path)
         await message.reply_photo(
             photo="final.png",
-            caption="** ابٴ≪━━━━━ 𝙀𝙇𝙍𝘼𝙎𝘼𝙈 ━━━━━≫ٴ
-📡 بدأ التشغيل✅ 💡
-____
+            caption="**⏳ Added to Queue at #1
 
-📟معلومات حول الاغنيه: اضغط هنا
-𝙀𝙇𝙍𝘼𝙎𝘼𝙈 𝙈𝙐𝙎𝙄𝘾 
-◍اتبع الاذرار  بلاسفل⬇️
-◍لطلب بوت راسل الرسام◍
-ٴ≪━━━━━ 𝙀𝙇𝙍𝘼𝙎𝘼𝙈 ━━━━━≫ٴ...**".format(position),
+💡Title: ____
+⏱Duration:____
+👤Added By: 𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈...**".format(position),
             reply_markup=keyboard,
         )
     else:
