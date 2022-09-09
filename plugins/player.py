@@ -374,11 +374,7 @@ async def play(_, message: Message):
         position = await queues.put(chat_id, file=file_path)
         await message.reply_photo(
             photo="final.png",
-            caption="**⏳ Added to Queue at #1
-
-💡Title: ____
-⏱Duration:____
-👤Added By: 𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈...**".format(position),
+            caption="**⏳ Added to Queue at...**".format(position),
             reply_markup=keyboard,
         )
     else:
