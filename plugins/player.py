@@ -142,21 +142,13 @@ async def play(_, message: Message):
                     invitelink = await _.export_chat_invite_link(chid)
                 except:
                     await lel.edit(
-                        "**ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ
-📡 بدأ التشغيل✅ 💡
-________
-
-📟معلومات حول الاغنيه: اضغط هنا
-𝙀ٍ𝙇ً𝙍ً𝘼ً𝙎𝘼ٌ𝙈¹ 𝙈َ𝙐ٍ𝙎ً𝙄ِ𝘾 
-◍اتبع الاذرار  بلاسفل⬇️
-◍لطلب بوت راسل الرسام◍
-ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ**")
+                        "**انضم...**")
                     return
 
                 try:
                     await USER.join_chat(invitelink)
                     await USER.send_message(
-                        message.chat.id, "**جيت احلاقين**")
+                        message.chat.id, "** تم دخولي هههه  ...**")
 
                 except UserAlreadyParticipant:
                     pass
@@ -336,7 +328,7 @@ ________
 
         except Exception as e:
             await lel.edit(
-                "**❶أكَتُــبِ ألأسُمہ صَـحّ أفِِّتكَ...**"
+                "** اكتب الاسم صح ياورع...**"
             )
             print(str(e))
             return
@@ -382,15 +374,15 @@ ________
         position = await queues.put(chat_id, file=file_path)
         await message.reply_photo(
             photo="final.png",
-            caption="** ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ
+            caption="** ابٴ≪━━━━━ 𝙀𝙇𝙍𝘼𝙎𝘼𝙈 ━━━━━≫ٴ
 📡 بدأ التشغيل✅ 💡
-________
+____
 
 📟معلومات حول الاغنيه: اضغط هنا
-𝙀ٍ𝙇ً𝙍ً𝘼ً𝙎𝘼ٌ𝙈¹ 𝙈َ𝙐ٍ𝙎ً𝙄ِ𝘾 
+𝙀𝙇𝙍𝘼𝙎𝘼𝙈 𝙈𝙐𝙎𝙄𝘾 
 ◍اتبع الاذرار  بلاسفل⬇️
 ◍لطلب بوت راسل الرسام◍
-ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ...**".format(position),
+ٴ≪━━━━━ 𝙀𝙇𝙍𝘼𝙎𝘼𝙈 ━━━━━≫ٴ...**".format(position),
             reply_markup=keyboard,
         )
     else:
@@ -407,15 +399,15 @@ ________
         await message.reply_photo(
             photo="final.png",
             reply_markup=keyboard,
-            caption="ِِ** ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ
+            caption="**ٴ≪━━━━━ 𝙀𝙇𝙍𝘼𝙎𝘼𝙈 ━━━━━≫ٴ
 📡 بدأ التشغيل✅ 💡
-________
+____
 
 📟معلومات حول الاغنيه: اضغط هنا
-𝙀ٍ𝙇ً𝙍ً𝘼ً𝙎𝘼ٌ𝙈¹ 𝙈َ𝙐ٍ𝙎ً𝙄ِ𝘾 
+𝙀𝙇𝙍𝘼𝙎𝘼𝙈 𝙈𝙐𝙎𝙄𝘾 
 ◍اتبع الاذرار  بلاسفل⬇️
 ◍لطلب بوت راسل الرسام◍
-ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ ...**".format(),
+ٴ≪━━━━━ 𝙀𝙇𝙍𝘼𝙎𝘼𝙈 ━━━━━≫ٴ...**".format(),
            )
 
     os.remove("final.png")
