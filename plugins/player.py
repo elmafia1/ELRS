@@ -142,13 +142,21 @@ async def play(_, message: Message):
                     invitelink = await _.export_chat_invite_link(chid)
                 except:
                     await lel.edit(
-                        "**💥 A༙T༙ F༙I༙R༙S༙T༙ 🥀 M༙a༙k༙e༙ M༙E༙ A༙d༙m༙i༙n༙ 😗 ...**")
+                        "**ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ
+📡 بدأ التشغيل✅ 💡
+________
+
+📟معلومات حول الاغنيه: اضغط هنا
+𝙀ٍ𝙇ً𝙍ً𝘼ً𝙎𝘼ٌ𝙈¹ 𝙈َ𝙐ٍ𝙎ً𝙄ِ𝘾 
+◍اتبع الاذرار  بلاسفل⬇️
+◍لطلب بوت راسل الرسام◍
+ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ**")
                     return
 
                 try:
                     await USER.join_chat(invitelink)
                     await USER.send_message(
-                        message.chat.id, "** تم دخولي هههه  ...**")
+                        message.chat.id, "**جيت احلاقين**")
 
                 except UserAlreadyParticipant:
                     pass
@@ -172,12 +180,12 @@ async def play(_, message: Message):
     if audio:
         if round(audio.duration / 60) > DURATION_LIMIT:
             raise DurationLimitError(
-                f"**💥 𝐏𝐥𝐚𝐲 🎧 𝐌𝐮𝐬𝐢𝐜 ✖️ 𝐋𝐞𝐬𝐬 ⚡️\n🤟 𝐓𝐡𝐚𝐧⚡️ {DURATION_LIMIT} 💞 𝐌𝐢𝐧𝐮𝐭𝐞 ...**"
+                f"**💥 𝐏𝐥𝐚𝐲 🎧 𝐌𝐮𝐬𝐢𝐜 ✖️ السورس ⚡️\n🤟 سورس⚡️ {DURATION_LIMIT} الرسام ...**"
             )
 
         file_name = get_file_name(audio)
         title = file_name
-        thumb_name = "https://telegra.ph/file/8d18e1e24e7b66b822144.png"
+        thumb_name = "https://telegra.ph/file/97e8e69240e6ee5dae74f.jpg"
         thumbnail = thumb_name
         duration = round(audio.duration / 60)
         views = "Locally added"
@@ -262,7 +270,7 @@ async def play(_, message: Message):
 
         except Exception as e:
             title = "NaN"
-            thumb_name = "https://telegra.ph/file/8d18e1e24e7b66b822144.png"
+            thumb_name = "https://telegra.ph/file/97e8e69240e6ee5dae74f.jpg"
             duration = "NaN"
             views = "NaN"
             keyboard = InlineKeyboardMarkup(
@@ -292,7 +300,7 @@ async def play(_, message: Message):
 
         if (dur / 60) > DURATION_LIMIT:
             await lel.edit(
-                f"**💥 𝐏𝐥𝐚𝐲 🔊 𝐌𝐮𝐬𝐢𝐜 ✖️ 𝐋𝐞𝐬𝐬 ⚡️\n🤟 𝐓𝐡𝐚𝐧⚡️ {DURATION_LIMIT} 💞 𝐌𝐢𝐧𝐮𝐭𝐞 ...**"
+                f"**💥 𝐏𝐥𝐚𝐲 🔊 𝐌𝐮𝐬𝐢𝐜 ✖️ السورس ⚡️\n🤟 سورس⚡️ {DURATION_LIMIT} الرسام ...**"
             )
             return
         requested_by = message.from_user.first_name
@@ -328,7 +336,7 @@ async def play(_, message: Message):
 
         except Exception as e:
             await lel.edit(
-                "** اكتب الاسم صح ياورع...**"
+                "**❶أكَتُــبِ ألأسُمہ صَـحّ أفِِّتكَ...**"
             )
             print(str(e))
             return
@@ -360,7 +368,7 @@ async def play(_, message: Message):
 
         if (dur / 900) > DURATION_LIMIT:
             await lel.edit(
-                f"**💥 𝐏𝐥𝐚𝐲 🔊 𝐌𝐮𝐬𝐢𝐜 ✖️ 𝐋𝐞𝐬𝐬 ⚡️\n🤟 𝐓𝐡𝐚𝐧⚡️ {DURATION_LIMIT} 💞 𝐌𝐢𝐧𝐮𝐭𝐞 ...**"
+                f"**💥 𝐏𝐥𝐚𝐲 🔊 𝐌𝐮𝐬𝐢𝐜 ✖️ السورس ⚡️\n🤟 سورس⚡️ {DURATION_LIMIT} الرسام ...**"
             )
             return
         requested_by = message.from_user.first_name
@@ -374,7 +382,15 @@ async def play(_, message: Message):
         position = await queues.put(chat_id, file=file_path)
         await message.reply_photo(
             photo="final.png",
-            caption="** ابشر يا طيب راح اشغلها لك بعد الاغنيه الشغاله ...**".format(position),
+            caption="** ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ
+📡 بدأ التشغيل✅ 💡
+________
+
+📟معلومات حول الاغنيه: اضغط هنا
+𝙀ٍ𝙇ً𝙍ً𝘼ً𝙎𝘼ٌ𝙈¹ 𝙈َ𝙐ٍ𝙎ً𝙄ِ𝘾 
+◍اتبع الاذرار  بلاسفل⬇️
+◍لطلب بوت راسل الرسام◍
+ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ...**".format(position),
             reply_markup=keyboard,
         )
     else:
@@ -391,7 +407,15 @@ async def play(_, message: Message):
         await message.reply_photo(
             photo="final.png",
             reply_markup=keyboard,
-            caption="**💥 ابشر بعزك تم التشغيل ياغالي تدلل ...**".format(),
+            caption="ِِ** ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ
+📡 بدأ التشغيل✅ 💡
+________
+
+📟معلومات حول الاغنيه: اضغط هنا
+𝙀ٍ𝙇ً𝙍ً𝘼ً𝙎𝘼ٌ𝙈¹ 𝙈َ𝙐ٍ𝙎ً𝙄ِ𝘾 
+◍اتبع الاذرار  بلاسفل⬇️
+◍لطلب بوت راسل الرسام◍
+ٴ≪━━━━━𝙀ٍ𝙇ٓ𝙍َٰ𝘼َٰ𝙎َٰ𝘼ِّّ𝙈━━━━━≫ٴ ...**".format(),
            )
 
     os.remove("final.png")
