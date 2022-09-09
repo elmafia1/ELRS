@@ -142,7 +142,7 @@ async def play(_, message: Message):
                     invitelink = await _.export_chat_invite_link(chid)
                 except:
                     await lel.edit(
-                        "**انضم...**")
+                        "**انضم ...**")
                     return
 
                 try:
@@ -177,7 +177,7 @@ async def play(_, message: Message):
 
         file_name = get_file_name(audio)
         title = file_name
-        thumb_name = "https://telegra.ph/file/97e8e69240e6ee5dae74f.jpg"
+        thumb_name = "https://telegra.ph/file/8d18e1e24e7b66b822144.png"
         thumbnail = thumb_name
         duration = round(audio.duration / 60)
         views = "Locally added"
@@ -262,7 +262,7 @@ async def play(_, message: Message):
 
         except Exception as e:
             title = "NaN"
-            thumb_name = "https://telegra.ph/file/97e8e69240e6ee5dae74f.jpg"
+            thumb_name = "https://telegra.ph/file/8d18e1e24e7b66b822144.png"
             duration = "NaN"
             views = "NaN"
             keyboard = InlineKeyboardMarkup(
@@ -328,7 +328,7 @@ async def play(_, message: Message):
 
         except Exception as e:
             await lel.edit(
-                "** اكتب الاسم صح ياورع...**"
+                "**❶أكَتُــبِ ألأسُمہ صَـحّ أفِِّتكَ...**"
             )
             print(str(e))
             return
@@ -374,7 +374,8 @@ async def play(_, message: Message):
         position = await queues.put(chat_id, file=file_path)
         await message.reply_photo(
             photo="final.png",
-            caption="**⏳ Added to Queue at...**".format(position),
+            caption="**  🏆
+𝙀𝙇𝙍𝘼𝙎𝘼𝙈 𝙈𝙐𝙎𝙄𝘾 🏆 ...**".format(position),
             reply_markup=keyboard,
         )
     else:
@@ -391,15 +392,9 @@ async def play(_, message: Message):
         await message.reply_photo(
             photo="final.png",
             reply_markup=keyboard,
-            caption="**ٴ≪━━━━━ 𝙀𝙇𝙍𝘼𝙎𝘼𝙈 ━━━━━≫ٴ
-📡 بدأ التشغيل✅ 💡
+            caption="ِِ** 📡 بدأ التشغيل✅ 💡
 ____
-
-📟معلومات حول الاغنيه: اضغط هنا
-𝙀𝙇𝙍𝘼𝙎𝘼𝙈 𝙈𝙐𝙎𝙄𝘾 
-◍اتبع الاذرار  بلاسفل⬇️
-◍لطلب بوت راسل الرسام◍
-ٴ≪━━━━━ 𝙀𝙇𝙍𝘼𝙎𝘼𝙈 ━━━━━≫ٴ...**".format(),
+𝙀𝙇𝙍𝘼𝙎𝘼𝙈 𝙈𝙐𝙎𝙄𝘾  ...**".format(),
            )
 
     os.remove("final.png")
