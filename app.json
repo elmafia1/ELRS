@@ -1,6 +1,6 @@
 {
-    "name": "ميوزك الرسام",
-    "logo": "https://telegra.ph/file/ee7f3d01f1ad82d5b8aae.jpg",
+    "name": "ميوزك كزابلانكا",
+    "logo": "https://telegra.ph/file/362e62af56db3a5e1bbe7.jpg",
     "description": "افضل سورسات التليكرام",
     "keywords": ["tgmusicbot", "voice chat", "telegram"],
     "repository": "https://github.com/ELrasmElknk/ELK.git ",
@@ -20,9 +20,9 @@
             "value": "Elrasam7"
         },
         "START_PIC": {
-            "description": "صورة البوت مطلوبة",
+            "description": "لاتغيرها",
             "required": true,
-            "value": "https://telegra.ph/file/ee7f3d01f1ad82d5b8aae.jpg"
+            "value": "https://telegra.ph/file/362e62af56db3a5e1bbe7.jpg"
         },
         "BOT_TOKEN": {
             "description": "توكن بوتك حط",
@@ -34,9 +34,9 @@
             "value": "Elrasam11111bot"
         },
         "PROFILE_CHANNEL": {
-            "description": "رابط قناتك خلي .",
+            "description": "اتركها لا تغيرها ",
             "required": true,
-            "value": "https://t.me/E_L_R_A_S_A_M"
+            "value": "https://t.me/ELRSAM11"
         },
         "OWNER_USERNAME": {
             "description": "معرفك بدون@ كمطور",
