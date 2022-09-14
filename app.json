@@ -1,75 +1,149 @@
 {
-    "name": "ميوزك كزابلانكا",
-    "logo": "https://telegra.ph/file/362e62af56db3a5e1bbe7.jpg",
+
+    "name": "ميوزك الــمــافــيــا",
+
+    "logo": "https://telegra.ph/file/e270ca38db21a863a70db.jpg",
+
     "description": "افضل سورسات التليكرام",
+
     "keywords": ["tgmusicbot", "voice chat", "telegram"],
+
     "repository": "https://github.com/ELrasmElknk/ELK.git ",
+
     "stack": "container",
+
     "env": {
+
         "API_HASH": {
+
             "description": "قم بوضع الايبي هاش",
+
             "required": true
+
         },
+
         "API_ID": {
+
             "description": "ايبي ايدي مطلوب",
+
             "required": true
+
         },
+
         "ASSISTANT_USERNAME": {
+
             "description": "معرف حساب المساعد بدون '@')",
+
             "required": true,
+
             "value": "Elrasam7"
+
         },
+
         "START_PIC": {
+
             "description": "لاتغيرها",
+
             "required": true,
-            "value": "https://telegra.ph/file/362e62af56db3a5e1bbe7.jpg"
+
+            "value": "https://telegra.ph/file/e270ca38db21a863a70db.jpg"
+
         },
+
         "BOT_TOKEN": {
+
             "description": "توكن بوتك حط",
+
             "required": true
+
         },
+
         "BOT_USERNAME": {
+
             "description": "معرف بوتك بدون '@')",
+
             "required": true,
-            "value": "Elrasam11111bot"
+
+            "value": "BOT_ELMAFIABOT"
+
         },
+
         "PROFILE_CHANNEL": {
+
             "description": "اتركها لا تغيرها ",
+
             "required": true,
-            "value": "https://t.me/ELRSAM11"
+
+            "value": "https://t.me/ramzeiatelmafia222"
+
         },
+
         "OWNER_USERNAME": {
+
             "description": "معرفك بدون@ كمطور",
+
             "required": true,
-            "value": "Mahmod777777"
+
+            "value": "V_I_P_ELMAFIA"
+
         },
+
         "STRING_SESSION": {
+
             "description": "كود بايروجرام",
+
             "required": true
+
         },
+
         "SUDO_USERS": {
+
             "description": "ايدي المطورين حط ايديك كمطور",
+
             "required": true,
-            "value": "2125600195"
+
+            "value": "5530826437"
+
             
+
         },
+
         "SUPPORT_GROUP": {
+
             "description": "رابط كروب الدعم حطه",
+
             "required": true,
-            "value": "https://t.me/ELRSAM11"
+
+            "value": "https://t.me/elmafia222"
+
         },
+
         "UPDATES_CHANNEL": {
+
             "description": "رابط قناتك الثانيه ازا ماعندك غير وحده حطو نفس يلي فوك",
+
             "required": true,
-            "value": "https://t.me/E_L_R_A_S_A_M"
+
+            "value": "https://t.me/ramzeiatelmafia222"
+
         }
+
     },
+
     "buildpacks": [
+
     {
+
       "url": "heroku/python"
+
     },
+
     {
+
       "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+
     }
+
   ]
+
 }
