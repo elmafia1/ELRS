@@ -1,4 +1,4 @@
-<h1 align="center"><b>𝗦𝗨𝗢𝗥𝗖𝗘 ™⋆⃟🇪🇸𝘾َ𝘼𝙎َ𝘼𝘽ً𝙇𝘼ٍ𝙉ٍ𝘾ً𝘼</b></h1>
+<h1 align="center"><b>𝗦𝗨𝗢𝗥𝗖𝗘 𝐓𝐄𝐌 𝐄𝐋𝐌𝐀𝐅𝐈𝐀</b></h1>
 
 <p align="center">
     <br><b>يدعم تشغيل الموسيقي والفديو داخل المحادثات الصوتية</b><br>
@@ -7,11 +7,11 @@
     <a href="https://www.python.org/" alt="اللغة المستخدمة"> <img src="https://img.shields.io/badge/Made%20with-Python-black.svg?style=flat-square&logo=python&logoColor=blue&color=red" /></a>
 </p>
 ## 🧪الحصول علي جلسة البيوجرام:
-[![جلسة بيوجرام]<a href="https://t.me/ELRASAMbot"><img src="https://img.shields.io/badge/Dev%20ELRASAM-blue.svg?style=for-the-badge&logo=استخراج جلسه"></a> <a href="https://t.me/ELRASAMbot"><img src="https://img.shields.io/badge/استخراج جلسه-blue.svg?style=for-the-badge&logo=جلسه بيروجرام"></a> <a href="https://t.me/ELRASAMbot"><img src="https://img.shields.io/badge/جلسه بيروجرام -blue.svg?style=for-the-badge&logo=ELRASAM"></a>
+[![جلسة بيوجرام]<a href="https://t.me/BOT_ELMAFIABOT"><img src="https://img.shields.io/badge/Dev%20ELRASAM-blue.svg?style=for-the-badge&logo=استخراج جلسه"></a> <a href="https://t.me/BOT_ELMAFIABOT"><img src="https://img.shields.io/badge/استخراج جلسه-blue.svg?style=for-the-badge&logo=جلسه بيروجرام"></a> <a href="https://t.me/BOT_ELMAFIABOT"><img src="https://img.shields.io/badge/جلسه بيروجرام -blue.svg?style=for-the-badge&logo=V_I_P_ELMAFIA"></a>
 
-## 𝗦𝗨𝗢𝗥𝗖𝗘 ™⋆⃟🇪🇸𝘾َ𝘼𝙎َ𝘼𝘽ً𝙇𝘼ٍ𝙉ٍ𝘾ً𝘼 
+## 𝗦𝗨𝗢𝗥𝗖𝗘 𝐓𝐄𝐌 𝐄𝐋𝐌𝐀𝐅𝐈𝐀 
 <p align="center">
-  <img src="https://telegra.ph/file/362e62af56db3a5e1bbe7.jpg">
+  <img src="https://telegra.ph/file/e270ca38db21a863a70db.jpg">
 </p>
 
 ## ✨ المميزات
@@ -66,4 +66,4 @@
 
 
 مطــــــــور السورس ¦🦦
-<a href="https://t.me/Mahmod777777"><img src="https://img.shields.io/badge/Dev%20ELRASAM-blue.svg?style=for-the-badge&logo=ELRASAM"></a> <a href="https://t.me/E_L_R_A_S_A_M"><img src="https://img.shields.io/badge/يـــــوزرا آلَرًسًــــــــآمِ-blue.svg?style=for-the-badge&logo=ELRASAM"></a> <a href="https://t.me/E_R_S_A_M1"><img src="https://img.shields.io/badge/ELRASAM2-blue.svg?style=for-the-badge&logo=ELRASAM"></a>
+<a href="https://t.me/V_I_P_ELMAFIA"><img src="https://img.shields.io/badge/Dev%20ELRASAM-blue.svg?style=for-the-badge&logo=ELRASAM"></a> <a href="https://t.me/E_L_R_A_S_A_M"><img src="https://img.shields.io/badge/يـــــوزرا آلَرًسًــــــــآمِ-blue.svg?style=for-the-badge&logo=ELRASAM"></a> <a href="https://t.me/E_R_S_A_M1"><img src="https://img.shields.io/badge/ELRASAM2-blue.svg?style=for-the-badge&logo=ELRASAM"></a>
